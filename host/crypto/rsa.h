@@ -13,7 +13,7 @@ oe_result_t oe_rsa_get_public_key_from_private(
 
 /* Caller is responsible for freeing public key. */
 oe_result_t oe_rsa_get_public_key_from_engine(
-    const char *engine_id,
+    const char* engine_id,
     const uint64_t key_id,
     oe_rsa_public_key_t* public_key);
 

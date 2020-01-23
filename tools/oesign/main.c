@@ -16,12 +16,13 @@
 
 static const char* arg0;
 int oedump(const char*);
-int oesign(const char* enclave, 
-           const char* conffile,
-           const char* keyfile,
-           const char *engine_id,
-           const char *engine_load_path,
-           const char *key_id);
+int oesign(
+    const char* enclave,
+    const char* conffile,
+    const char* keyfile,
+    const char* engine_id,
+    const char* engine_load_path,
+    const char* key_id);
 
 OE_PRINTF_FORMAT(1, 2)
 void Err(const char* format, ...)
@@ -480,7 +481,8 @@ static const char _usage_sign[] =
     "    CONFIG_FILE -- configuration file containing enclave properties\n"
     "    KEY_FILE -- private key file used to digitally sign the image\n"
     "    ENGINE-NAME -- text name of the engine to use, for example 'pkcs-11'"
-    "    ENGINE-LOADPATH -- absolute path to the shared object which implements the engine "
+    "    ENGINE-LOADPATH -- absolute path to the shared object which "
+    "implements the engine "
     "    KEY-ID -- text string specifying the desired key from the engine "
     "\n"
     "Description:\n"
@@ -508,14 +510,16 @@ static const char _usage_sign[] =
     "        Debug=1\n"
     "        NumHeapPages=1024\n"
     "\n"
-    "    If specified, the key read from KEY_FILE and contains a private RSA key in PEM\n"
+    "    If specified, the key read from KEY_FILE and contains a private RSA "
+    "key in PEM\n"
     "    format. The keyfile must contain the following header.\n"
     "\n"
     "        -----BEGIN RSA PRIVATE KEY-----\n"
     "\n"
     "    The resulting image is written to ENCLAVE_IMAGE.signed\n"
     "\n"
-    " Keys may also be received from an openssl engine. specified by the string ENGINE-NAME\n"
+    " Keys may also be received from an openssl engine specified by the "
+    "string ENGINE-NAME\n"
     " If they are received from an engine, KEY-FILE must not be specified. \n"
     "\n";
 
@@ -529,10 +533,13 @@ static const char _usage_dump[] =
     "    This option dumps the oeinfo and signature information of an "
     "enclave\n";
 
-int oesign(const char* enclave, const char* conffile, const char* keyfile,
-           const char *engine_id,
-           const char *engine_load_path,
-           const char *key_id)
+int oesign(
+    const char* enclave,
+    const char* conffile,
+    const char* keyfile,
+    const char* engine_id,
+    const char* engine_load_path,
+    const char* key_id)
 {
     int ret = 1;
     oe_result_t result;
@@ -783,15 +790,12 @@ int sign_parser(int argc, const char* argv[])
                 keyfile = optarg;
                 break;
             case 'n':
-printf("engine = %s\n", optarg);
                 engine_id = optarg;
                 break;
             case 'p':
-printf("path = %s\n", optarg);
                 engine_load_path = optarg;
                 break;
             case 'i':
-printf("keyid = %s\n", optarg);
                 key_id = optarg;
                 break;
             case ':':
@@ -823,7 +827,8 @@ printf("keyid = %s\n", optarg);
         ret = 1;
     }
     if (!ret)
-        ret = oesign(enclave, conffile, keyfile, engine_id, engine_load_path, key_id);
+        ret = oesign(
+            enclave, conffile, keyfile, engine_id, engine_load_path, key_id);
 
 done:
 
