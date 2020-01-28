@@ -967,6 +967,7 @@ static int _hostfs_stat(
     device_t* fs = _cast_device(device);
     char host_path[OE_PATH_MAX];
     int retval = -1;
+    struct oe_syscall_stat tmp;
 
     if (buf)
         oe_memset_s(buf, sizeof(*buf), 0, sizeof(*buf));
@@ -977,8 +978,25 @@ static int _hostfs_stat(
     if (_make_host_path(fs, pathname, host_path) != 0)
         OE_RAISE_ERRNO(oe_errno);
 
-    if (oe_syscall_stat_ocall(&retval, host_path, buf) != OE_OK)
+    if (oe_syscall_stat_ocall(&retval, host_path, &tmp) != OE_OK)
         OE_RAISE_ERRNO(OE_EINVAL);
+
+    buf->st_dev = tmp.st_dev;
+    buf->st_ino = tmp.st_ino;
+    buf->st_nlink = tmp.st_nlink;
+    buf->st_mode = tmp.st_mode;
+    buf->st_uid = tmp.st_uid;
+    buf->st_gid = tmp.st_gid;
+    buf->st_rdev = tmp.st_rdev;
+    buf->st_size = tmp.st_size;
+    buf->st_blksize = tmp.st_blksize;
+    buf->st_blocks = tmp.st_blocks;
+    buf->st_atim.tv_sec = tmp.st_atim.tv_sec;
+    buf->st_atim.tv_nsec = tmp.st_atim.tv_nsec;
+    buf->st_mtim.tv_sec = tmp.st_mtim.tv_sec;
+    buf->st_mtim.tv_nsec = tmp.st_mtim.tv_nsec;
+    buf->st_ctim.tv_sec = tmp.st_ctim.tv_sec;
+    buf->st_ctim.tv_nsec = tmp.st_ctim.tv_nsec;
 
     ret = retval;
 

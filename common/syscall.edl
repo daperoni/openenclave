@@ -26,10 +26,32 @@ enclave {
     include "openenclave/internal/syscall/sys/poll.h"
     include "openenclave/internal/syscall/sys/socket.h"
     include "openenclave/internal/syscall/sys/utsname.h"
-    include "openenclave/internal/syscall/sys/stat.h"
     include "openenclave/internal/syscall/dirent.h"
     include "openenclave/internal/syscall/poll.h"
     include "openenclave/internal/syscall/types.h"
+
+    struct oe_syscall_timespec
+    {
+        int64_t tv_sec;
+        int64_t tv_nsec;
+    };
+
+    struct oe_syscall_stat
+    {
+        uint64_t st_dev;
+        uint64_t st_ino;
+        uint64_t st_nlink;
+        uint32_t st_mode;
+        uint32_t st_uid;
+        uint32_t st_gid;
+        uint64_t st_rdev;
+        int64_t st_size;
+        int64_t st_blksize;
+        int64_t st_blocks;
+        struct oe_syscall_timespec st_atim;
+        struct oe_syscall_timespec st_mtim;
+        struct oe_syscall_timespec st_ctim;
+    };
 
     trusted {
 
@@ -111,7 +133,7 @@ enclave {
 
         int oe_syscall_stat_ocall(
             [in, string] const char* pathname,
-            [out, count=1] struct oe_stat* buf)
+            [out, count=1] struct oe_syscall_stat* buf)
             propagate_errno;
 
         int oe_syscall_access_ocall(
